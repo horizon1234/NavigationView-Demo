@@ -46,14 +46,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupView() {
+        //这里setSupportActionBar看似多余，其实是必须要写的，toolbar是替代actionbar用的
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         frameLayout = (FrameLayout) findViewById(R.id.content_frame);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //前面drawerLayout介绍过 drawerToggle是DrawerListener的子类，是为了增加侧滑菜单和APP icon之间的联动
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.addDrawerListener(drawerToggle);
+        //要记住不论侧滑菜单是自定义的RecyclerView还是现场NavigationView都是默认在DrawerLayout的第二个子控件，是自动滑出就是的 不用设置。
 
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -90,15 +93,16 @@ public class MainActivity extends AppCompatActivity {
                 fragmentClass = HomeFragment.class;
                 break;
         }
-
+        //fragment的操作需要熟记于心
         try {
             Fragment fragment = (Fragment) fragmentClass.newInstance();
             fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        //小知识点设置控件的阴影，也就是控件的z坐标，使用setElevation来设置控件在z轴的高度
         setToolbarElevation(specialToolbarBehaviour);
+        //小知识点menu的使用，这个一般使用的不是很多 主要就是设置选中
         menuItem.setChecked(true);
         setTitle(menuItem.getTitle());
         drawerLayout.closeDrawers();
@@ -115,6 +119,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    * md风格的新控件 TextInputLayout很不错 还有这种小的底部提示弹出框Snackbar
+    * */
     public void showSnackbarMessage(View v) {
         EditText et_snackbar = (EditText) findViewById(R.id.et_snackbar);
         TextInputLayout textInputLayout = (TextInputLayout) findViewById(R.id.textInputLayout);
